@@ -3,7 +3,7 @@
 ## Syntax
 
 The Content in an .ahkp file
-```
+```ahk
 TestFunction2()
 {
   name := reduce(["one", "two", "three"],anon(acc, val, delimiter){
@@ -14,7 +14,7 @@ TestFunction2()
 ```
 
 compiles to this in the main ahk
-```
+```ahk
 TestFunction2()
 {
   name := reduce(["one", "two", "three"],"531ab339cc324e2e8791685978a89024", ";")
@@ -23,7 +23,7 @@ TestFunction2()
 
 ```
 and this in an included ahk
-```
+```ahk
 531ab339cc324e2e8791685978a89024(acc, val, delimiter){
     return acc . "blablabal" .  val
     }
