@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import re, string, uuid, datetime, sys
+import re, string, uuid, datetime, sys, ntpath, time, os
 
 
 
@@ -10,7 +10,6 @@ original_file = "test.ahkp"
 new_file = "test.ahk"
 function_file ="test_python_functions.ahk"
 original_file_content = ""
-comment_base = "; Python generated Anonymous Functions for Autohotkey."
 import_string ="#include " + function_file + "\n"
 if (len(sys.argv) > 1):
   original_file = sys.argv[1]
@@ -24,8 +23,8 @@ else:
 def randomName():
   return re.sub(r'-', '', str(uuid.uuid4()))
 
-def generateCommentLine():
-  return comment_base + " Generated @\n" # + str(datetime.time(datetime.datetime.now())) + "\n"
+def generateCommentLine(comment_base):
+  return comment_base + ntpath.basename(original_file) + "\n;Generated @" + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + "\n"
 
 
 
@@ -45,19 +44,18 @@ with open(original_file, "r") as original:
 
   print function_mapping
   with open(new_file, "w") as text:
+    text.write(generateCommentLine("; Python generated Mainscript: "))
     text.write(new_content)
     text.write("\n"+import_string+"\n")
 
   with open(function_file, "w") as myfile:
-    myfile.write(generateCommentLine())
+    myfile.write(generateCommentLine("; Python generated Anonymous Functions: "))
     for function in function_mapping:
       func = function[0] + function[1][2]
       myfile.write(string.join(func, "")+"\n")
 
-
-
-print results
-
+if (len(sys.argv) > 2):
+  os.system(new_file)
 
 
 
